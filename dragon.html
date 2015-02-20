@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<!-- vim: set ts=2 sw=2: -->
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Dragon curve</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+
+    <style>
+      body {
+        color            : white;
+        background-color : black;
+      }
+      table {
+        margin-bottom: 5px;
+      }
+      input {
+        margin-top: 10px;
+      }
+      span {
+        margin-right: 50px;
+        min-width: 50px;
+      }
+      a {
+        color: deepskyblue;
+      }
+    </style>
+
+    <form>
+      <table>
+        <tr>
+          <td>
+            Recursion level:
+          </td>
+          <td>
+            <input id="level" type="range" value="0" min="0" max="15" step="1" onchange="updateFractal(+this.value)">
+            <span id="level-value">0</span>
+          </td>
+          <td>
+            Transition duration:
+          </td>
+          <td>
+            <input id="trans" type="range" value="0" min="0" max="3000" step="50" onchange="updateTransition(+this.value)">
+            <span id="trans-value"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            X-Size:
+          </td>
+          <td>
+            <input id="xsize" type="range" value="800" min="0" max="1200" step="10" onchange="xChangeSize(+this.value)">
+            <span id="xsize-value"></span>
+          </td>
+          <td>
+            Save proportions:
+            <input id="prop" type="checkbox" checked="1" onchange="updateProp(+this.checked)">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Y-Size:
+          </td>
+          <td>
+            <input id="ysize" type="range" value="600" min="0" max="1200" step="10" onchange="yChangeSize(+this.value)">
+            <span id="ysize-value"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            X-Mirror:
+            <input id="xmirror" type="checkbox" onchange="xmirrorize(+this.checked)">
+          </td>
+          <td>
+            Y-Mirror:
+            <input id="ymirror" type="checkbox" onchange="ymirrorize(+this.checked)">
+          </td>
+          <td></td>
+          <td>
+            <a href="https://en.wikipedia.org/wiki/Dragon_curve">Dragon curve on Wikipedia</a>
+          </td>
+        </tr>
+      </table>
+    </form>
+
+    <svg id="fractal" xmlns="http://www.w3.org/2000/svg" version="1.1">
+      <g >
+        <path stroke-width="1" fill="none"/>
+      </g>
+    </svg>
+
+    <script>
+      var dots=[{x:0, y:0}, {x:1, y:0}];
+      var width = window.innerWidth
+        || document.documentElement.clientWidth
+        || document.body.clientWidth;
+      var height = window.innerHeight
+        || document.documentElement.clientHeight
+        || document.body.clientHeight;
+      width  = Math.min(width,         1200);
+      height = Math.min(height*70/100, 1200);
+
+      var xScale = d3.scale.linear()
+      var yScale = d3.scale.linear()
+      var gScale = d3.scale.linear()
+      var curlevel = 0;
+      var xMirror = 0;
+      var yMirror = 0;
+      var trans   = 750;
+      var prop    = 1;
+
+      xChangeSize(width);
+      yChangeSize(height);
+      updateTransition(trans);
+      updateProp(prop);
+      draw(dots);
+
+      function updateFractal (l = curlevel) {
+        d3.select("#level-value").text(l);
+        var newdots = levelize(0, l, dots);
+        redraw(newdots);
+        curlevel = l;
+      }
+
+      function xChangeSize (size) {
+        width = size;
+        d3.select("#xsize-value").text(size + "px");
+        d3.select("#xsize").attr("value", size);
+        updateContainer();
+        updateFractal();
+      }
+
+      function yChangeSize (size) {
+        height = size;
+        d3.select("#ysize-value").text(size + "px");
+        d3.select("#ysize").attr("value", size);
+        updateContainer();
+        updateFractal();
+      }
+
+      function updateTransition (val) {
+        trans = val;
+        d3.select("#trans-value").text(trans + "ms");
+        d3.select("#trans").attr("value", val);
+      }
+
+      function xmirrorize (checked) {
+        xMirror = checked;
+        updateFractal();
+      }
+
+      function ymirrorize (checked) {
+        yMirror = checked;
+        updateFractal();
+      }
+
+      function updateProp (checked) {
+        prop = checked;
+        updateFractal();
+      }
+
+      function coordMinMax (dotlist) {
+        var xMin = dotlist[0].x;
+        var xMax = dotlist[0].x;
+        var yMin = dotlist[0].y;
+        var yMax = dotlist[0].y;
+        for (var i=1; i<dotlist.length; i++) {
+          dotlist[i].x < xMin ? xMin = dotlist[i].x : {};
+          dotlist[i].x > xMax ? xMax = dotlist[i].x : {};
+          dotlist[i].y < yMin ? yMin = dotlist[i].y : {};
+          dotlist[i].y > yMax ? yMax = dotlist[i].y : {};
+        }
+        var gMin = (xMax-xMin)/width > (yMax-yMin)/height ? xMin : yMin;
+        var gMax = (xMax-xMin)/width > (yMax-yMin)/height ? xMax : yMax;
+        var gRge = (xMax-xMin)/width > (yMax-yMin)/height ? width : height;
+        return {xMin:xMin, xMax:xMax,
+                yMin:yMin, yMax:yMax,
+                gMin:gMin, gMax:gMax,
+                gRge:gRge};
+      }
+
+      function levelize(howDeep, level, dotlist) {
+        if (howDeep >= level)
+          return dotlist;
+        var newdotlist = [];
+        for (var i=0; i<dotlist.length-1; i++) {
+          newdotlist.push(dotlist[i]);
+          var dot = {x:0, y:0};
+          if (i%2 == 0) {
+            var vec = {x:(dotlist[i+1].x - dotlist[i].x), y:(dotlist[i+1].y - dotlist[i].y)};
+            var angle = 45 * 2 * Math.PI / 360;
+          }
+          else
+          {
+            var vec = {x:(dotlist[i].x - dotlist[i+1].x), y:(dotlist[i].y - dotlist[i+1].y)};
+            var angle = 135 * 2 * Math.PI / 360;
+          }
+          dot.x = dotlist[i].x + (1/Math.sqrt(2))*(Math.cos(angle)*vec.x - Math.sin(angle)*vec.y);
+          dot.y = dotlist[i].y + (1/Math.sqrt(2))*(Math.sin(angle)*vec.x + Math.cos(angle)*vec.y);
+          newdotlist.push(dot);
+        }
+        newdotlist.push(dotlist[dotlist.length-1]);
+        return levelize(howDeep+1, level, newdotlist);
+      }
+
+      function makePath(dotlist) {
+        var extrema = coordMinMax(dotlist);
+        dstring = "";
+        for (var i=0; i<dotlist.length; i++) {
+          if (prop) {
+            gScale.range([0, extrema.gRge]);
+            gScale.domain([extrema.gMin, extrema.gMax]);
+            dstring +=" L " + (xMirror*gScale(extrema.xMax)  + (1-2*xMirror) * gScale(dotlist[i].x))
+                    +  ","  + (yMirror*gScale(extrema.yMax) + (1-2*yMirror) * gScale(dotlist[i].y));
+          }
+          else {
+            xScale.range([0, width]);
+            xScale.domain([extrema.xMin, extrema.xMax]);
+            yScale.range([0, height]);
+            yScale.domain([extrema.yMin, extrema.yMax]);
+            dstring +=" L " + (xMirror*xScale(extrema.xMax)  + (1-2*xMirror) * xScale(dotlist[i].x))
+                    +  ","  + (yMirror*yScale(extrema.yMax) + (1-2*yMirror) * yScale(dotlist[i].y));
+          }
+        }
+        return dstring.replace("L", "M");
+      }
+      function draw(dotlist) {
+        d3.select("#fractal").select("g").select("path")
+            .attr("stroke", function() {
+              return "hsl(" + Math.random() * 360 + ",100%,50%)";
+            })
+            .attr("d", makePath(dotlist));
+      }
+      function redraw(dotlist) {
+        d3.select("#fractal").select("g").select("path")
+            .transition()
+            .duration(trans)
+            .attr("stroke", function() {
+              return "hsl(" + Math.random() * 360 + ",100%,50%)";
+            })
+            .attr("d", makePath(dotlist));
+      }
+      function updateContainer () {
+        d3.select("#fractal")
+            .transition()
+            .duration(trans+20)
+            .attr("width", width + "px")
+            .attr("height", height + "px");
+      }
+    </script>
+
+  </body>
+</html>
