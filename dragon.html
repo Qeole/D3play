@@ -16,11 +16,11 @@
       table {
         margin-bottom: 5px;
       }
+      td {
+        min-width: 120px;
+      }
       input {
         margin-top: 10px;
-      }
-      span {
-        margin-right : 50px;
       }
       a {
         color: deepskyblue;
@@ -35,6 +35,8 @@
           </td>
           <td>
             <input id="level" type="range" value="0" min="0" max="15" step="1" onchange="updateFractal(+this.value)">
+          </td>
+          <td>
             <span id="level-value">0</span>
           </td>
           <td>
@@ -42,6 +44,8 @@
           </td>
           <td>
             <input id="trans" type="range" value="0" min="0" max="3000" step="50" onchange="updateTransition(+this.value)">
+          </td>
+          <td>
             <span id="trans-value"></span>
           </td>
         </tr>
@@ -51,6 +55,8 @@
           </td>
           <td>
             <input id="xsize" type="range" value="800" min="0" max="1200" step="10" onchange="xChangeSize(+this.value)">
+          </td>
+          <td>
             <span id="xsize-value"></span>
           </td>
           <td>
@@ -64,6 +70,8 @@
           </td>
           <td>
             <input id="ysize" type="range" value="600" min="0" max="1200" step="10" onchange="yChangeSize(+this.value)">
+          </td>
+          <td>
             <span id="ysize-value"></span>
           </td>
         </tr>
@@ -76,6 +84,7 @@
             Y-Mirror:
             <input id="ymirror" type="checkbox" onchange="ymirrorize(+this.checked)">
           </td>
+          <td></td>
           <td></td>
           <td>
             <a href="https://en.wikipedia.org/wiki/Dragon_curve">Dragon curve on Wikipedia</a>
