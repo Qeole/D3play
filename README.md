@@ -9,5 +9,5 @@ Have a look
 -----------
 
 ### Dragon curve
-![Dragon curve screenshot](blob/master/previews/dragon.png =400x)
+![Dragon curve screenshot](previews/dragon.png =400x)
 A Dragon curve generated dynamically. [Go to page]()
