@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- vim: set ts=2 sts=2 sw=2: -->
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Sorting</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+
+    <script>
+      gMargin = { top: 10, right: 30, bottom: 30, left: 30 };
+      gPrefs = {
+        maxVal      : 100,
+        nbVal       : 20,
+        svgWidth    : 960 - gMargin.left - gMargin.right,
+        svgHeight   : 500 - gMargin.top - gMargin.bottom
+      };
+    </script>
+
+    <style>
+      body {
+        font: 10px sans-serif;
+      }
+      .bar rect {
+        fill: steelblue;
+        shape-rendering: crispEdges;
+      }
+      .bar text {
+        fill: #fff;
+      }
+      .axis path, .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+    </style>
+
+    <svg></svg>
+
+    <div id='log'></div>
+
+    <script src="graph.js" charset="utf-8"></script>
+    <script>
+      var j = 0;
+      d3.select("svg")
+          .attr("onclick", "swap(1, j++)");
+    </script>
+
+
+    <script id="worker1" type="javascript/worker">
+      self.onmessage = function(e) {
+        self.postMessage(e.data);
+      };
+    </script>
+
+    <script>
+      function log(msg) {
+        // Use a fragment: browser will only render/reflow once.
+        var fragment = document.createDocumentFragment();
+        fragment.appendChild(document.createTextNode(msg));
+        fragment.appendChild(document.createElement('br'));
+
+        document.querySelector("#log").appendChild(fragment);
+      }
+
+      var blob = new Blob([document.querySelector('#worker1').textContent]);
+
+      var worker = new Worker(window.URL.createObjectURL(blob));
+      worker.onmessage = function(e) {
+        log("Received: " + e.data);
+      }
+      worker.postMessage('hi'); // Start the worker.
+    </script>
+
+  </body>
+</html>
