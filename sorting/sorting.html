@@ -8,49 +8,73 @@
   </head>
   <body>
 
-    <script>
-      gMargin = { top: 10, right: 30, bottom: 30, left: 30 };
-      gPrefs = {
-        maxVal      : 100,
-        nbVal       : 20,
-        svgWidth    : 960 - gMargin.left - gMargin.right,
-        svgHeight   : 500 - gMargin.top - gMargin.bottom
-      };
-    </script>
-
+    <!--Style-->
     <style>
       body {
-        font: 10px sans-serif;
+        font            : 10px sans-serif;
       }
       .bar rect {
-        fill: steelblue;
-        shape-rendering: crispEdges;
+        fill            : steelblue;
+        shape-rendering : crispEdges;
       }
       .bar text {
-        fill: #fff;
+        fill            : #fff;
       }
       .axis path, .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
+        fill            : none;
+        stroke          : #000;
+        shape-rendering : crispEdges;
+      }
+      svg {
+        float           : left;
       }
     </style>
 
-    <svg></svg>
+    <!--Page content - to set before calling functions-->
+    <svg id="bubble"></svg>
+    <svg id="insertion"></svg>
+    <svg id="selection"></svg>
+    <svg id="fusion"></svg>
 
     <div id='log'></div>
 
+    <!--External scripts - define functions-->
+    <script src="main.js" charset="utf-8"></script>
     <script src="graph.js" charset="utf-8"></script>
+
+    <!--Globals-->
     <script>
-      var j = 0;
-      d3.select("svg")
-          .attr("onclick", "swap(1, j++)");
+      var gMargin = { top: 10, right: 30, bottom: 30, left: 30 };
+      var gPrefs = {
+        maxVal      : 100,
+        nbVal       : 20,
+        svgWidth    : 600 - gMargin.left - gMargin.right,
+        svgHeight   : 400 - gMargin.top - gMargin.bottom
+      };
+      var gXscale, gYscale;
+      var values;
     </script>
 
+    <!--Calls to functions - call them once everything else is loaded-->
+    <script>
+      setValues();
+      drawGraph();
+    </script>
+
+    <!--Remaining code-->
+    <script>
+      var j = 0;
+      d3.selectAll("svg")
+        .on("click", clickSVG);
+      function clickSVG () {
+        console.log(d3.event.currentTarget.id);
+        swap("#" + d3.event.currentTarget.id, 1, j++)
+      }
+    </script>
 
     <script id="worker1" type="javascript/worker">
       self.onmessage = function(e) {
-        self.postMessage(e.data);
+        self.postMessage("sending " + e.data);
       };
     </script>
 
