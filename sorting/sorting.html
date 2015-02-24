@@ -37,6 +37,9 @@
     <svg id="fusion"></svg>
 
     <div id='log'></div>
+    <div id="controls">
+      <button type="submit" onclick="start()">Start</button>
+    </div>
 
     <!--External scripts - define functions-->
     <script src="main.js" charset="utf-8"></script>
@@ -49,25 +52,30 @@
         maxVal      : 100,
         nbVal       : 20,
         svgWidth    : 600 - gMargin.left - gMargin.right,
-        svgHeight   : 400 - gMargin.top - gMargin.bottom
+        svgHeight   : 400 - gMargin.top  - gMargin.bottom,
+        period      : 150,
+        transition  : 100
       };
       var gXscale, gYscale;
-      var values;
+      var gInitValues;
+      var gVal;
+      var gState;
     </script>
 
     <!--Calls to functions - call them once everything else is loaded-->
     <script>
-      setValues();
+      setInitVal();
       drawGraph();
+      cloneVals();
     </script>
 
     <!--Remaining code-->
     <script>
       var j = 0;
       d3.selectAll("svg")
-        .on("click", clickSVG);
+//        .on("click", clickSVG);
+        .on("click", selectionLoop);
       function clickSVG () {
-        console.log(d3.event.currentTarget.id);
         swap("#" + d3.event.currentTarget.id, 1, j++)
       }
     </script>

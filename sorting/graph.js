@@ -5,7 +5,7 @@ function drawGraph () {
       .range ([0, gPrefs.svgWidth]);
 
   gYscale = d3.scale.linear()
-      .domain([0,                d3.max(values)])
+      .domain([0,                d3.max(gInitValues)])
       .range ([gPrefs.svgHeight, 0]);
 
   var xAxis = d3.svg.axis()
@@ -23,7 +23,7 @@ function drawGraph () {
       .attr("transform", "translate(" + gMargin.left + "," + gMargin.top + ")");
 
   var bar = svg.selectAll(".bar")
-      .data(values)
+      .data(gInitValues)
     .enter().append("g")
       .attr("class", "bar")
       .attr("transform", function(d, i) {
@@ -58,6 +58,14 @@ function swap (aTarget, a, b) {
   if (a<0 || b<0 || a>=gPrefs.nbVal || b>=gPrefs.nbVal)
     return;
 
+  var values;
+  switch (aTarget) {
+    case "#bubble"    : values = gVal.bubble; break;
+    case "#insertion" : values = gVal.insertion; break;
+    case "#selection" : values = gVal.selection; break;
+    case "#fusion"    : values = gVal.fusion; break;
+    default           : values = gInitValues;
+  }
   var temp  = values[a];
   values[a] = values[b];
   values[b] = temp;
@@ -81,19 +89,21 @@ function swap (aTarget, a, b) {
     .selectAll(".bar")
       .filter((d, i) => { return i == a; })
       .transition()
+      .duration(gPrefs.transition)
       .attr("transform", tmp2);
   var bar2 = d3.select(aTarget)
     .selectAll(".bar")
       .filter((d, i) => { return i == b; })
       .transition()
+      .duration(gPrefs.transition)
       .attr("transform", tmp1);
 
-  swapG(a, b, bar1[0][0], bar2[0][0]);
+  swapGs(a, b, bar1[0][0], bar2[0][0]);
 }
 
-function swapG (a, b, aBar, bBar) {
+function swapGs (a, b, aBar, bBar) {
   if (a>b)
-    return swapG (b, a, bBar, aBar);
+    return swapGs (b, a, bBar, aBar);
 
   var p = aBar.parentNode;
   p.removeChild(aBar);
@@ -109,9 +119,11 @@ function swapG (a, b, aBar, bBar) {
   return true;
 }
 
-function redraw () {
-  var bar = d3.selectAll(".bar")
-      .data(values).transition()
+function redraw (aVal, aTarget = "svg") {
+  var bar = d3.select(aTarget)
+    .selectAll(".bar")
+      .data(aVal).transition()
+      .duration(gPrefs.transition)
       .attr("transform", function(d, i) { return "translate(" + gXscale(i + 1/2 + 1/6) + "," + gYscale(d) + ")"; });
   bar.select("rect")
       .attr("height", function(d) { return gPrefs.svgHeight - gYscale(d); });
