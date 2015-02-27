@@ -12,7 +12,6 @@ function ssc () {
   var Ybase=8;
   var Xbase=8;
   var dots=12;
-  var ssc = {};
 
   function clock (){
     var time=new Date ();
