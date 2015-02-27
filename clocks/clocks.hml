@@ -22,6 +22,9 @@
     <div id="vivusClock"></div>
     <script>var viv = new viv(); viv.launch();</script>
 
+    <script src="camembert.js"></script>
+    <div id="camembert"></div>
+    <script>var cam = new cam(); cam.launch();</script>
 
     <!--<button onclick="b.stop()">Stop time</button>-->
   </body>
