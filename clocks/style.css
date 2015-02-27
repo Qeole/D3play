@@ -10,8 +10,6 @@ div {
     width    : 170px;
     height   : 100px;
     position : relative;
-    left     : 84px;
-    top      : 50px;
 }
 #stdScrollClock .dig, #stdScrollClock .hour, #stdScrollClock .min, #stdScrollClock .sec {
     position : absolute;

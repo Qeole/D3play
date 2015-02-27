@@ -7,11 +7,13 @@ function ssc () {
   var M=M.split('');
   var S='......';
   var S=S.split('');
-  var Ypos=0;
-  var Xpos=0;
+  var Ypos=50;
+  var Xpos=85;
   var Ybase=8;
   var Xbase=8;
   var dots=12;
+
+  var loop;
 
   function clock (){
     var time=new Date ();
@@ -22,8 +24,8 @@ function ssc () {
     var hr=time.getHours();
     var hrs=-1.57 + Math.PI * hr/6 + Math.PI*parseInt(time.getMinutes())/360;
     for (i=0; i < dots; ++i){
-      document.getElementById("dig" + (i+1)).style.top=0-15+40*Math.sin(-0.49+dots+i/1.9).toString() + "px";
-      document.getElementById("dig" + (i+1)).style.left=0-14+40*Math.cos(-0.49+dots+i/1.9).toString() + "px";
+      document.getElementById("dig" + (i+1)).style.top =Ypos+0-15+40*Math.sin(-0.49+dots+i/1.9).toString() + "px";
+      document.getElementById("dig" + (i+1)).style.left=Xpos+0-14+40*Math.cos(-0.49+dots+i/1.9).toString() + "px";
     }
     for (i=0; i < S.length; i++){
       document.getElementById("sec" + (i+1)).style.top =Ypos+i*Ybase*Math.sin(sec).toString() + "px";
@@ -69,6 +71,10 @@ function ssc () {
   this.launch = function () {
     fill();
     clock();
-    setInterval(clock, 1000);
+    loop = setInterval(clock, 1000);
+  }
+
+  this.stop = function () {
+    window.clearInterval(loop);
   }
 }

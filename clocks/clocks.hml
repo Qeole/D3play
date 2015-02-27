@@ -17,5 +17,7 @@
     <div id="stdScrollClock"></div>
     <script>var ssc = new ssc(); ssc.launch();</script>
 
+
+    <!--<button onclick="b.stop()">Stop time</button>-->
   </body>
 </html>
