@@ -37,3 +37,8 @@ div {
 #stdScrollClock .sec {
     background : #FF0000;
 }
+
+#vivusClock {
+    width      : 270px;
+    text-align : center;
+}
