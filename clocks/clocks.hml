@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!-- vim: set ts=2 sw=2: -->
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Clock concepts</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+
+    <script src="basic.js"></script>
+    <div id="basic"></div>
+    <script>var b = new basic(); b.launch();</script>
+
+    <script src="stdScrollClock.js"></script>
+    <div id="stdScrollClock"></div>
+    <script>var ssc = new ssc(); ssc.launch();</script>
+
+  </body>
+</html>

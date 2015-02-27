@@ -1,0 +1,41 @@
+div {
+    float : left;
+}
+
+#stdScrollClock {
+    width : 170px;
+    text-align : center;
+}
+#stdScrollClock .clock {
+    width    : 170px;
+    height   : 100px;
+    position : relative;
+    left     : 84px;
+    top      : 50px;
+}
+#stdScrollClock .dig, #stdScrollClock .hour, #stdScrollClock .min, #stdScrollClock .sec {
+    position : absolute;
+}
+#stdScrollClock .hour, #stdScrollClock .min, #stdScrollClock .sec {
+    width     : 2px;
+    height    : 2px;
+    font-size : 2px;
+}
+#stdScrollClock .dig {
+    width       : 30px;
+    height      : 30px;
+    font-family : arial,verdana,sans-serif;
+    font-size   : 10px;
+    color       : #000000;
+    text-align  : center;
+    padding-top : 10px
+}
+#stdScrollClock .min {
+    background : #0000FF;
+}
+#stdScrollClock .hour {
+    background : #000000;
+}
+#stdScrollClock .sec {
+    background : #FF0000;
+}
