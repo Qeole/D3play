@@ -30,7 +30,6 @@ function tri() {
     6,  /*19*/
     7   /*20*/
   ];
-  var revMapping = [ 5, 10, 4, 13, 19, 20, 18, 12, 15, 11, 3, 8, 2, 1, 6, 0, 8 ]
 
   function getStyle (aInt, aFill) {
     if (aFill == 99)
@@ -109,7 +108,6 @@ function tri() {
           return 99;
       }
     );
-    console.log(values);
 
     g.selectAll("path")
         .data(values)
