@@ -75,7 +75,7 @@ function viv () {
   function changeMins () {
     if (vivusMins)
       vivusMins.play(-1);
-    setTimeout(() => { drawMins(); }, 4000);
+    setTimeout(() => { drawMins(); }, 5000);
   }
 
   function drawMins () {
@@ -101,7 +101,7 @@ function viv () {
   function changeHrs () {
     if (vivusHrs)
       vivusHrs.play(-1);
-    setTimeout(() => { drawHrs(); }, 2200);
+    setTimeout(() => { drawHrs(); }, 5000);
   }
 
   function drawHrs () {
@@ -144,8 +144,7 @@ function viv () {
         .attr("id", "vivus-secs")
       .append("g");
 
-    d3.select("#vivusClock")
-      .append("a")
+    clock.append("a")
         .attr("href", "https://maxwellito.github.io/vivus/")
         .text("Using Vivus");
 

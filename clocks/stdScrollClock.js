@@ -61,9 +61,12 @@ function ssc () {
     fillOne("hour", 4);
     fillOne("min" , 5);
     fillOne("sec" , 6);
+  }
 
-    d3.select("#stdScrollClock")
+  function credit () {
+    d3.select("#stdScrollClock").select(".clock")
       .append("a")
+        .attr("style", "display: inline-block; margin-top: 60px;")
         .attr("href", "http://www.w3schools.com/js/js_timing.asp")
         .text("Standard Scroll Clock by kurt.grigg@virgin.net");
   }
@@ -71,6 +74,7 @@ function ssc () {
   this.launch = function () {
     fill();
     clock();
+    credit();
     loop = setInterval(clock, 1000);
   }
 

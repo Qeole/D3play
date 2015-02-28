@@ -11,20 +11,28 @@
   <body>
 
     <script src="basic.js"></script>
-    <div id="basic"></div>
-    <script>var b = new basic(); b.launch();</script>
+    <div id="basic" class="container"></div>
+    <script>var bas = new basic(); bas.launch();</script>
 
     <script src="stdScrollClock.js"></script>
-    <div id="stdScrollClock"></div>
+    <div id="stdScrollClock" class="container"></div>
     <script>var ssc = new ssc(); ssc.launch();</script>
 
     <script src="vivusClock.js"></script>
-    <div id="vivusClock"></div>
+    <div id="vivusClock" class="container"></div>
     <script>var viv = new viv(); viv.launch();</script>
 
     <script src="camembert.js"></script>
-    <div id="camembert"></div>
+    <div id="camembert" class="container"></div>
     <script>var cam = new cam(); cam.launch();</script>
+
+    <script src="binary.js"></script>
+    <div id="binary" class="container"></div>
+    <script>var bin = new bin(); bin.launch();</script>
+
+    <script src="triforce.js"></script>
+    <div id="triforce" class="container"></div>
+    <script>var tri = new tri(); tri.launch();</script>
 
     <!--<button onclick="b.stop()">Stop time</button>-->
   </body>

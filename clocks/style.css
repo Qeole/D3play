@@ -1,9 +1,17 @@
-div {
-    float : left;
+.container {
+    float   : left;
+    margin  : 20px;
+    height  : 200px;
+    display : table;
+}
+
+.clock {
+    display        : table-cell;
+    vertical-align : middle;
 }
 
 #stdScrollClock {
-    width : 170px;
+    width      : 170px;
     text-align : center;
 }
 #stdScrollClock .clock {
